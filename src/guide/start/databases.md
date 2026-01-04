@@ -307,10 +307,8 @@ final readonly class PageRepository
      */
     public function findAll(): iterable
     {
-        $data = $this->connection
-            ->select()
-            ->from('{{%page}}')
-            ->all();
+        $query = new Query($this->connection);
+        $data = $query->from('page')->all();
 
         foreach ($data as $page) {
             yield $this->createPage($page);
@@ -342,8 +340,8 @@ final readonly class PageRepository
 
     public function exists(string $id): bool
     {
-        return $this->connection->createQuery()
-            ->from('{{%page}}')
+        $query = new Query($this->connection);
+        return $query->from('page')
             ->where(['id' => $id])
             ->exists();
     }
